@@ -1,0 +1,75 @@
+models:
+  - name: dim_movies
+    description: Dimenstion table for movies
+    columns:
+      - name: movie_id
+        description: Primary Key for movies
+        tests:
+          - not_null
+      - name: movie_title
+        description: Movie Title
+        tests:
+          - not_null
+      - name: genre_array
+        description: Genres in Arrays
+      - name: genres
+        description: Genres in raw format
+  
+  - name: dim_users
+    description: Dimenstion table for users
+    columns:
+      - name: user_id
+        description: Primary Key for users
+        tests:
+          - unique
+          - not_null
+  
+  - name: dim_genome_tags
+    description: Dimenstion table for genome tags
+    columns:
+      - name: tag_id
+        description: Primary Key for tags
+        tests:
+          - unique
+          - not_null
+      - name: tag_name
+        description: Tag Name
+        tests:
+          - not_null
+  
+  - name: fct_ratings
+    description: Fact table for movie user ratings
+    columns:
+      - name: user_id
+        description: Foreign key to dim_users
+        tests:
+          - not_null
+      - name: movie_id
+        description: Foreign key to dim_movies
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_movies')
+              field: movie_id
+      - name: rating
+        description: USer rating for a movie
+        tests:
+          - not_null
+      - name: rating_timestamp
+        description: Timestamp for rating
+
+  - name: fct_genome_scores
+    description: Fact table for relevance scores per movie
+    columns:
+      - name: movie_id
+        description: Foreign Key to dim_movies
+        tests:
+          - not_null
+      - name: tag_id
+        description: Foreign Key to dim_genome_tags
+        tests:
+          - not_null
+      - name: relevance_score
+        description: Relevance scores
+        tests:
+          - not_null
